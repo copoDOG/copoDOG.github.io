@@ -1,0 +1,232 @@
+I"t/<h2 id="시나리오">시나리오</h2>
+
+<font size="3">
+신일이는 최근 가장 잘나가는 게임인 gmm을 하고싶지만 구매하기에는 돈이 아까워했다.
+그래서 인터넷에 gmm 무료 설치파일을 발견하고 다운로드 받았다.
+"설치방법.txt"에 나온대로 "GMM1.exe"를 관리자 권한으로 실행하였다.
+하지만 그 파일은 사실 랜섬웨어였고 신일이의 PC는 랜섬웨어에 감염이 되고만다.
+감염 후 자신의 행동을 반성하고자 gmm 사이트에 접속하여 랜섬웨어 분석 공부를 시작하게 되었는데...
+</font>
+
+<h1 id="분석-순서">분석 순서</h1>
+
+<ol>
+  <li>vm에 ova(or ovf) 파일을 import한다.</li>
+  <li>“basic-0” 스냅샷으로 이동한다.</li>
+  <li>전원을 키고 바탕화면에 있는 GMM1.exe를 관리자 권한으로 실행한다.</li>
+  <li>실행 후 변화를 인지하고 스냅샷 “basic-0”으로 돌아온다.</li>
+  <li>랜섬웨어인 GMM1.exe을 분석해본다.</li>
+</ol>
+
+<font size="3">
+사용툴 :  Exeinfo PE, Bin Text, PEview, Process Monitor, processHacker, OllyDBG
+
+Exeinfo PE(PE파일 분석툴)을 사용하여
+패킹여부 확인 및 사용언어 C++ 확인 [빌드에 사용된 프로그램 Visual studio사용 확인]
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869491-bdc68380-2c0e-11eb-82cb-03b3149eacd9.jpg" /></p>
+<font size="3">패킹여부와 컴파일 프로그램 확인</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869527-00885b80-2c0f-11eb-86b0-d0c6420e2b4a.jpg" /></p>
+<font size="3">문자열 검색 </font>
+
+<font size="4">
+패킹이 안 되있는 것을 확인 후 문자열 검색툴인 BinText 사용
+문자열 검색은 C&amp;C서버의 주소, 프로그램의 출력메세지, 윈도우 함수 명령 등을 추출가능
+공격자가 의도치 않게 놓친 문자열을 보고 해당 프로그램의 취약점을 발견 가능하다.
+
+만일 문자열이 적게 검색 되거나 의미없는 문자열만 존재한다면 패킹이나 난독화를 의심
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869544-2dd50980-2c0f-11eb-9b69-bc46198edb8d.gif" /></p>
+<font size="3">GMM1.exe 실행후 프로세스 변화</font>
+
+<font size="4">
+ProcessHacker 툴을 사용하고 GMM1.exe를 실행하여 프로세스가 실시간으로 어떤 변화가 있는지
+확인하고 해당 프로세스들이
+SearchProtocol, SearchFilterHost, dllhost, conhost 4가지의 프로세스가 추가됨을 알수있다.
+</font>
+<ol>
+  <li>SearchProtocol과 SearchFilterHost를 보아 해당 샘플은 감염PC에서 무언가를 검색하여 찾아내며,</li>
+  <li>conhost(콘솔창)를 사용하여 명령어를 사용하지만 콘솔창을 숨기고 알수없는 명령어를 실행한다는것</li>
+  <li>dllhost.exe 같은 경우 window에서 기본적으로 사용하는 응용프로그램 관리 프로세스지만 PC자원을 많이 소비하는 등의 이상징후가 있는 경우 악성코드를 의심해봐야한다.</li>
+</ol>
+
+<p>이후 프로세스의 흐름을 따라가보기 위해
+GMM1.exe를 실행하기전의 스냅샷으로 돌아가procmon을 실행</p>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869630-07fc3480-2c10-11eb-99e6-e9c78cfadd8a.jpg" /></p>
+<font size="3">Procmon (프로세스 모니터 실행 화면)</font>
+
+<font size="4">
+실행후 Ctrl + E를 눌러 캡쳐 시작하면 무수히 많은 프로세스가 나오는것을 확인할수있음
+그 상태에서 GMM1.exe를 실행하고 파일이 삭제될때까지 캡쳐후 Ctrl + E를 눌러 캡쳐중지
+
+무수히 많은 프로세스중 우리가 필요한 프로세스만을 확인 하기 위해
+Ctrl+L을 눌러 필터링 창을 열고 Process Name is GMM1.exe에 맞춰 검색한다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869637-0cc0e880-2c10-11eb-8159-0637b43e1b9e.jpg" /></p>
+<font size="3">
+프로세스 모니터 필터링
+</font>
+
+<font size="4">
+그래도 아직 많은 프로세스들이 확인되고 있기 때문에 우리가 전 단계에서 확인했던 명령프롬프트를 실행한다는 점을 고려하여 Path Contains cmd를 추가하고
+더 확실하게 하기 위하여 Operation is Process Create을 추가해주면 단 3개의 프로세스를 확인 할 수있다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869638-0d597f00-2c10-11eb-8bac-a7e13642c5c9.jpg" /></p>
+<font size="3">
+프로세스 모니터 필터링
+</font>
+
+<font size="4">
+이로서 전단계에서 백드라운드 실행이 된 명령어가 특정폴더에 있는 .GMM파일을 삭제한다는 것을 확인할수 있었으며, 간단하게 Ctrl + T를 눌러 프로세스 트리를 확인하여 확인할수도있다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869650-19ddd780-2c10-11eb-91b6-d9f63f8208d5.jpg" /></p>
+<font size="3">
+프로세스 트리로 확인한 모습
+</font>
+
+<font size="4">
+다음은 샘플에서 어떤 DLL을 호출하고 어떤 함수를 사용하는지 확인하기 위해 Peview 실행해보겠다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869651-1b0f0480-2c10-11eb-9b61-186b6ceb81ce.jpg" /></p>
+<font size="3">
+Peview를 사용하여 본 DLL 호출 목록
+</font>
+
+<font size="4">
+PEview로 확인한 결과
+GMM1.exe는
+libcrypto.dll
+Kernel32.dll
+user32.dll
+Advapi32.dl
+lVCruntime.dll
+api-ms-win-crt ~ .dll 등을 호출하는것을 알수있으며
+
+각자 임포트되는 함수목록은 IMPORT Address Table 항목에 나와있다.
+우리가 여기서 눈 여겨 보아야 하는 함수 목록은 lipcryto.dll이다.
+해당 함수들은 랜섬웨어에서 주로 사용하는 AES, DES, RSA등의 암호화를 지원하는 Openssl의 기본암호화 루틴을 제공해준다.
+해당 샘플 랜섬웨어가 외부에서 암호화키를 받아오는 방식이 아닌 내부 프로그램에 키가 존재하는것을 확인했다면 openssl을 사용한다는것을 알아낼수있다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869652-1c403180-2c10-11eb-9200-060bcf0c823e.jpg" /></p>
+<font size="3">
+libcryto 사용 함수목록
+</font>
+
+<font size="4">
+그외 우리가 눈 여겨봐야하는 함수들은 다른 악성코드들에게서 많이 보이는
+Kernel 32.dll 에서의
+프로세스, 힙, 스레드 및 모듈의 스냅샷을 만드는데 사용 되는 CreateToolhelp32Snapshot 함수
+프로세스를 종료시키는 TerminateProcess 함수
+명령을 대기시키는 sleep 함수
+레지스트리값 불러오기 및 읽어오는 advapi32.dll
+api-ms-crt-filesystem의 remove 삭제함수 등이 있다.
+
+이제 OllyDBG를 통해 코드를 확인해보도록 한다.
+OllyDBG 실행 후 View의 SourceFiles를 누르면
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869653-1cd8c800-2c10-11eb-9980-65d134ae33ec.jpg" /></p>
+<font size="4">
+이처럼 GMM1.exe에 사용된 세더와 소스들이 보인다.
+GMM1.exe는 소스코드에 대한 난독화나 암호화가 진행 되어있지 않기 때문에
+쉽게 소스를 볼 수 있으며,
+우리는 해당 샘플이 C 를 사용한다는 것을 PE파일 분석에서 이미 알았기 때문에 CPP파일을 열어보면
+해당 샘플이 어떤 코드들로 이루어져있는지 볼 수 있다.
+
+이후 아래부터는 C코드와 어셈블리 코드를 같이 적으면서
+searchfor -&gt; all intermodular calls를 누르면 GMM1.exe의 사용함수들을 볼수있다.
+
+우리는 이제 PEview에서 확인했던 함수중 하나인  CreateProcess32Snapshot을 따라가보도록 하겠다.
+address에 나와있는 &lt;011A29CB&gt;를 Ctrl + G를 눌러 입력하고 따라가보면
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869654-1d715e80-2c10-11eb-9de4-777f8cbd3f3c.jpg" /></p>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869655-1ea28b80-2c10-11eb-8863-dadb18ac4600.jpg" /></p>
+<font size="3">
+OllyDBG에서 확인한 디컴파일 소스파일
+</font>
+
+<font size="4">
+해당 기능은 CreateToolhelp32Snapshot으로 먼저 프로세스를 스캔한다.
+이후 스냅한 프로세스중 TargetProcess에 지정된 프로세스가 있다면 이후의
+OpenProcess로 핸들값을 얻어온다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869656-1f3b2200-2c10-11eb-9fcd-bc28a08ec3d6.jpg" /></p>
+<font size="3">
+해당 트리는 OpenProcess로 프로세스의 핸들값을 얻어온 이후의 흐름도를 나타낸것이다.
+</font>
+
+<font size="4">
+이후 핸들값을 얻어와 TargetProcess와 일치하는 프로세스들을
+TerminateProcess로 해당 프로세스들을 종료시킨다.
+
+다음에 알아볼 기능은 레지스트리와 관련된  DLL중 advapi32.dll과 관련된 기능을 알아볼것이다.
+해당 샘플에선 특정 레지스트리 키값을 가져오는것을 확인할수있다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869657-1f3b2200-2c10-11eb-8a8a-023edbd85ab4.jpg" /></p>
+<font size="3">
+Reg값 불러오기
+</font>
+
+<font size="4">
+RegOpenKeyExA 지정된 레지스트리 키 열기
+Regclosekey 지정된 레지스트리 키 닫기
+RegQueryValue 지정한 키의 기본값 가져오기RegOpenKeyA 확인결과
+Control panel\\Internetional의 sLanguage의 키값을 비교하여 KOR와 일치하는지 확인하며
+KOR와 일치하면 암호화가 실행되도록 설계되어있다.
+
+대표적인 예로 GandCrab 랜섬웨어는 레지스트리에 러시아어가 있다면 암호화가 실행되지 않도록 되어있다.
+
+다음으로
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869658-206c4f00-2c10-11eb-8f0f-b5d88e5212ff.jpg" /></p>
+<font size="3">
+libcryto 사용 함수목록
+</font>
+
+<font size="4">
+암호화에 어떤 알고리즘이 사용되었으며 어떤 방식으로 암호화가 되었는지 알아보겠다.
+
+libcryto.dll은 openssl 암호화를 지원하며, 랜섬웨어에서 자주쓰이는 RSA, AES뿐만 아니라 CCM, CBC, CTR등의 여러가지 암호화를 지원해준다.
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869660-2104e580-2c10-11eb-965a-e8135bffa7e3.jpg" /></p>
+<font size="3">
+OpenSSL_add_all_ciphers () // OpenSSL 모든 암호화 알고리즘을 테이블에 추가
+EVP_get_cipherbyname // 암호 이름으로 구조전달 및 구조 반환
+</font>
+
+<p><img width="654" alt="" src="https://user-images.githubusercontent.com/65612054/99869661-219d7c00-2c10-11eb-98ef-b238b4f92144.jpg" /></p>
+<font size="3">
+노출된 암호화키
+</font>
+
+<font size="4">
+암호화에는 AES-128-CBC 방식을 적용하며
+키값은 문자열에 적혀있듯(디버거의 문자열 검색 활용) password01234567
+초기화벡터는 iv12345678901234 를 사용 한다는 것을 확인 할 수 있었다
+(초기화벡터란? 첫 블록을 암호화할 때 사용되는 값을 의미하며 고정으로 지정된 IV값으로 암호화
+진행시는 동일한 값만 나오기 때문에 복호화가 더 쉬워진다 )
+
+이제 우리는 GMM1.exe의 기능중 하나인 [일정 시간후 파일삭제]가 실행되기전에 복호화를 실행해야한다.
+AES암호화 방식은 양방향 암호화 방식으로 암/복호화에 동일한 키를 사용하는 암호화 방식이다.
+우리는 여태까지의 절차를 밟으며, 해당 암호화에 사용되는 키값과 초기화벡터값을 알아냈다.
+
+아래는 OpenSSL에서 제공하는 EVP함수에서 사용하는 대칭키 암호화 복호화에 대한 메뉴얼이다.
+</font>
+
+<p><a href="https://wiki.openssl.org/index.php/EVP_Symmetric_Encryption_and_Decryption">EVP Symmetric Encryption and Decryption</a></p>
+:ET

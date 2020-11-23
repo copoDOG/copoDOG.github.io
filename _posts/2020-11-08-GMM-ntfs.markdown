@@ -1,0 +1,8 @@
+---
+title:  "ntfs"
+subtitle: "New Technology File System"
+author: "team.GMM"
+avatar: "img/authors/favicon.ico"
+image: "img/ntfs.png"
+date:   2020-11-11
+---

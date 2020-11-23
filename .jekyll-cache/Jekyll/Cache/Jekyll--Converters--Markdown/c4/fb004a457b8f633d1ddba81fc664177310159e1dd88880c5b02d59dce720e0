@@ -1,0 +1,19 @@
+I"V<h3 id="ratp-drive">RATP Drive</h3>
+
+<ul>
+  <li>gmm.ova와 attacker.egg를 다운받은 후 가상머신에 임포트하여 사용합니다.</li>
+</ul>
+
+<p><a href="https://drive.google.com/file/d/1vq3oyIh8qGsb4qbqPBybTZy-a3yh9NXA/view?usp=sharing">gmm.ova 다운로드 하기</a></p>
+
+<ul>
+  <li>무료 프로그램으로 virtualbox(버츄얼박스)가 있습니다.</li>
+</ul>
+
+<p><a href="www.virtualbox.org">virtualbox 다운로드 하기</a></p>
+
+<ul>
+  <li>디컴파일러는 개별 준비가 필요합니다.<br />
+무료 디컴파일 툴로는 기드라(Ghidra)가 있습니다.</li>
+</ul>
+:ET

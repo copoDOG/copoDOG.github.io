@@ -1,0 +1,41 @@
+---
+title:  "자료실"
+subtitle: "RATP Drive"
+author: "team.GMM"
+avatar: "img/authors/favicon.ico"
+image: "img/Drive.png"
+date:   2020-11-16
+---
+
+### RATP Drive
+
+- gmm.ova를 다운받은 후 가상머신에 임포트하여 사용합니다.
+  attacker.egg를 다운받은 후 가상머신에 임포트하여 사용합니다.  
+
+ -------------------------
+
+
+- [gmm.ova 다운로드 하기](https://drive.google.com/file/d/1vq3oyIh8qGsb4qbqPBybTZy-a3yh9NXA/view?usp=sharing)
+
+- [attacker.egg 다운로드 하기](https://drive.google.com/file/d/1R70mrEPF1m06PQEK_cgZUfVL0yjv5fqM/view?usp=sharing)
+
+
+ -------------------------
+
+
+- 무료 프로그램으로 virtualbox(버츄얼박스)가 있습니다.  
+
+
+
+- [virtualbox 다운로드 하기](www.virtualbox.org)
+
+
+
+
+ -------------------------
+
+
+
+
+- 디컴파일러는 개별 준비가 필요합니다.  
+  무료 디컴파일 툴로는 기드라(Ghidra)가 있습니다.

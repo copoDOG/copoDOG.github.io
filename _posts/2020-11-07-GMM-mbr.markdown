@@ -7,9 +7,12 @@ image: "img/mbr.png"
 date:   2020-11-10
 ---
 
-### MBR 복구 가이드.docx 다운로드
+# Comming Soon
+
+// ## MBR 복구 가이드.docx 다운로드
 - [클릭](https://drive.google.com/file/d/1q-e2zcNb9uZIjoW_aDBhCFGWyRMBWnoz/view?usp=sharing)
-<br/>
+
+
 
 ``````c
 /*
@@ -22,6 +25,8 @@ by 최광석
 OS가 설치된 디스크에 접근하여 MBR을 XOR 암호화하는 방식으로 변조 후 강제종료시켜 더 이상 부팅을 할 수 없게 만듦.
 
 */
+
+/*
 
 #include <stdio.h>
 #include <windows.h>

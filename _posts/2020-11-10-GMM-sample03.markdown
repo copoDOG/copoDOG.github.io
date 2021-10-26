@@ -1,8 +1,13 @@
 ---
-title:  "샘플3"
+title:  "GMM03"
 subtitle: "Sample3"
 author: "team.GMM"
 avatar: "img/authors/favicon.ico"
 image: "img/sample3.png"
 date:   2020-11-13
 ---
+
+# Coming Soon...
+
+## Reference
+<a href="https://drive.google.com/file/d/1JSB7uxnmBWrE--ostsLfa1BYPwTr817R/view?usp=sharing">link : </a>

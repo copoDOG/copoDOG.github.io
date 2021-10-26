@@ -7,7 +7,7 @@ image: "img/sample2.png"
 date:   2020-11-14
 ---
 
-# Coming Soon...
+## Coming Soon...
 
-## Reference
-<a href="https://drive.google.com/file/d/1WQ3yyn5cbJw8JG1aXnReMY8Fq-u5hdUY/view?usp=sharing">link : </a>
+# Reference
+<a href="https://drive.google.com/file/d/1WQ3yyn5cbJw8JG1aXnReMY8Fq-u5hdUY/view?usp=sharing">link(click here)</a>
